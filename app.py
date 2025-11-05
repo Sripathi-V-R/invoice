@@ -6,19 +6,15 @@ import fitz  # PyMuPDF
 import streamlit as st
 import pandas as pd
 import zipfile
-from dotenv import load_dotenv
 from openai import OpenAI
 from io import BytesIO
 from PIL import Image
 from datetime import datetime, timedelta
 
 # ========= CONFIG =========
-load_dotenv()
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-if not OPENAI_API_KEY:
-    st.error("❌ OPENAI_API_KEY not found in .env file")
-    st.stop()
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 client = OpenAI(api_key=OPENAI_API_KEY)
+
 
 # ========= STREAMLIT UI =========
 st.set_page_config(page_title="📄 Invoice Data Extractor", layout="wide")
@@ -282,4 +278,5 @@ if uploaded_file:
                 st.download_button("🗜️ Download ZIP (PDF + Custom Excel)", zip_buffer2, f"{pdf_filename.split('.')[0]}_custom_bundle.zip", mime="application/zip")
 
         except Exception as e:
+
             st.error(f"❌ Error: {e}")
